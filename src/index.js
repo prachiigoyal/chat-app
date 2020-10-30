@@ -16,12 +16,13 @@ mongoose.Promise = global.Promise
 
 //connect to mongodb
 //mongodb+srv://chatapp:Admin@123456@cluster0.2im1i.mongodb.net/chat app?retryWrites=true&w=majority
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/discussion',{
+const uri= 'mongodb+srv://chatapp:Admin@123456@cluster0.2im1i.mongodb.net/chatapp?retryWrites=true&w=majority'
+mongoose.connect(process.env.MONGODB_URI || uri,{
     useUnifiedTopology: true,
     useNewUrlParser: true,
   })
 
-const port=process.env.PORT||3000
+const port=process.env.PORT || 3000
 const directoryPath=path.join(__dirname,'../public')
 
 app.use(express.static(directoryPath))
