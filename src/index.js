@@ -56,19 +56,29 @@ socket.on('messagesend',(message,callback)=>{
     if(filter.isProfane(message)){
         return callback('Profanity is not allowed!')
     }
-    const user=getUser(socket.id) 
+    const user=getUser(socket.id)
     io.to(user.room).emit('message',generateMessage(user.username,message))
     
-    const newMessage = new Message({
-        message:message,
-        userName:user.username,
-        createdAt:user.createdAt
-    });
-    newMessage.save()
-    .then(saved => {
-        console.log(saved);
+    const check = {
+        room:user.room
+    }
+    const update = {
+        chats:{
+            message:message,
+            userName:user.username,
+            createdAt:user.createdAt
+        }
+    }
+    Message.findOneAndUpdate(check,{$push:update},{
+        new:true,
+        upsert:true,
+        useFindAndModify:false
+    })
+    .then(data => {
+        console.log(data)
         return callback()
-    }).catch(err => console.log(err));
+    })
+    .catch(console.log)
 
 })
 
@@ -91,7 +101,7 @@ socket.on('disconnect', ()=>{
 })
 })
 
-app.get('/chat:room',(req,res) => {
+app.get('/chat/:room',(req,res) => {
     const {room}=req.params;
     Message.findOne({room})
     .then(messages => {

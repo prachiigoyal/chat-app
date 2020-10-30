@@ -44,10 +44,12 @@ socket.emit('join',{username,room},(error)=>{
         location.href='/'
     }
     fetch(`http://localhost:3000/chat/${room}`,{
+        method:'get',
         headers:{"Content-Type":"application/json"}
     }).then(res => res.json())
     .then(data => {
         var html = "";
+        console.log("yes")
         for(var i=0;i<data.length;i++){
             html += Mustache.render(messageTemplate,{
                 message:data[i].message,
