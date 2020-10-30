@@ -1,20 +1,30 @@
 const path=require('path')
 const express=require('express')
 const http=require('http')
+const mongoose=require('mongoose')
 const socketio=require('socket.io')
 const Filter=require('bad-words')
+const Message=require('./models/message')
 const { generateMessage,generateLocationMessage }=require('./utils/messages')
 const { addUsers,removeUser,getUser,getUsersInRoom}=require('./utils/users')
+const { assert } = require('console')
 
 const app=express()
 const server=http.createServer(app)
 const io=socketio(server)
+mongoose.Promise = global.Promise
+
+//connect to mongodb
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/discussion',{
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  })
 
 const port=process.env.PORT||3000
 const directoryPath=path.join(__dirname,'../public')
 
 app.use(express.static(directoryPath))
-
+app.use(express.json())
 
 // let count=0
 io.on('connection',(socket)=>{
@@ -45,8 +55,18 @@ socket.on('messagesend',(message,callback)=>{
         return callback('Profanity is not allowed!')
     }
     const user=getUser(socket.id) 
-io.to(user.room).emit('message',generateMessage(user.username,message))
-    callback()
+    io.to(user.room).emit('message',generateMessage(user.username,message))
+    
+    const newMessage = new Message({
+        message:message,
+        userName:user.username,
+        createdAt:user.createdAt
+    });
+    newMessage.save()
+    .then(saved => {
+        console.log(saved);
+        return callback()
+    }).catch(err => console.log(err));
 
 })
 
@@ -68,6 +88,14 @@ socket.on('disconnect', ()=>{
     }
 })
 })
+
+app.get('/chat',(req,res) => {
+    Message.find({})
+    .then(messages => {
+        res.json(messages);
+    })
+})
+
 //===================
 server.listen(port,()=>{
     console.log('server is up on port 3000')

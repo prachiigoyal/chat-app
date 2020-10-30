@@ -43,6 +43,24 @@ socket.emit('join',{username,room},(error)=>{
         alert(error)
         location.href='/'
     }
+    fetch('http://localhost:3000/chat',{
+        headers:{"Content-Type":"application/json"}
+    }).then(res => res.json())
+    .then(data => {
+        var html = "";
+        for(var i=0;i<data.length;i++){
+            html += Mustache.render(messageTemplate,{
+                message:data[i].message,
+                username:data[i].userName,
+                createdAt:moment(data[i].createdAt).format('h:mm a')
+            })
+        }
+
+        if(data)
+            $messages.insertAdjacentHTML("beforeend",html)
+        // console.log(data)
+    })
+    .catch(console.log)
 })
 socket.on('message', (message) => {
     console.log(message)
