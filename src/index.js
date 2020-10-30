@@ -94,7 +94,8 @@ socket.on('disconnect', ()=>{
 app.get('/chat',(req,res) => {
     Message.find({})
     .then(messages => {
-        res.json(messages);
+        io.to(user.room).emit(messages)
+        // res.json(messages);
     })
 })
 
