@@ -91,11 +91,14 @@ socket.on('disconnect', ()=>{
 })
 })
 
-app.get('/chat',(req,res) => {
-    Message.find({})
+app.get('/chat:room',(req,res) => {
+    const {room}=req.params;
+    Message.findOne({room})
     .then(messages => {
-        io.to(user.room).emit(messages)
-        // res.json(messages);
+        if(messages)
+        res.json(messages.chats);
+        // io.to(user.room).emit(messages)
+        // // res.json(messages);
     })
 })
 
