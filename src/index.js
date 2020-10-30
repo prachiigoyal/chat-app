@@ -57,23 +57,17 @@ socket.on('messagesend',(message,callback)=>{
     const user=getUser(socket.id) 
     io.to(user.room).emit('message',generateMessage(user.username,message))
     
-    const check = {
-        room:user.room
-    }
-    const update = {
-        chats:{
-            message:message,
-            userName:user.username,
-            createdAt:user.createdAt
-        }
-    }
-    Message.findOneAndUpdate(check,{$push:update},{
-        new:true,
-        upsert:true,
-        useFindAndModify:false
-    })
-    .then(data => console.log(data))
-    .catch(console.log)
+    const newMessage = new Message({
+        message:message,
+        userName:user.username,
+        createdAt:user.createdAt
+    });
+    newMessage.save()
+    .then(saved => {
+        console.log(saved);
+        return callback()
+    }).catch(err => console.log(err));
+
 })
 
 socket.on('sendLocation',(coords,callback)=>{
