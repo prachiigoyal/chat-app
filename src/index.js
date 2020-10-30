@@ -15,12 +15,14 @@ const io=socketio(server)
 mongoose.Promise = global.Promise
 
 //connect to mongodb
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/discussion',{
+//mongodb+srv://chatapp:Admin@123456@cluster0.2im1i.mongodb.net/chat app?retryWrites=true&w=majority
+const uri= 'mongodb+srv://chatapp:Admin@123456@cluster0.2im1i.mongodb.net/chatapp?retryWrites=true&w=majority'
+mongoose.connect(process.env.MONGODB_URI || uri,{
     useUnifiedTopology: true,
     useNewUrlParser: true,
   })
 
-const port=process.env.PORT||3000
+const port=process.env.PORT || 3000
 const directoryPath=path.join(__dirname,'../public')
 
 app.use(express.static(directoryPath))
@@ -54,19 +56,29 @@ socket.on('messagesend',(message,callback)=>{
     if(filter.isProfane(message)){
         return callback('Profanity is not allowed!')
     }
-    const user=getUser(socket.id) 
+    const user=getUser(socket.id)
     io.to(user.room).emit('message',generateMessage(user.username,message))
     
-    const newMessage = new Message({
-        message:message,
-        userName:user.username,
-        createdAt:user.createdAt
-    });
-    newMessage.save()
-    .then(saved => {
-        console.log(saved);
+    const check = {
+        room:user.room
+    }
+    const update = {
+        chats:{
+            message:message,
+            userName:user.username,
+            createdAt:user.createdAt
+        }
+    }
+    Message.findOneAndUpdate(check,{$push:update},{
+        new:true,
+        upsert:true,
+        useFindAndModify:false
+    })
+    .then(data => {
+        console.log(data)
         return callback()
-    }).catch(err => console.log(err));
+    })
+    .catch(console.log)
 
 })
 
@@ -90,11 +102,13 @@ socket.on('disconnect', ()=>{
 })
 
 app.get('/chat/:room',(req,res) => {
-    const { room } = req.params;
+    const {room}=req.params;
     Message.findOne({room})
     .then(messages => {
         if(messages)
         res.json(messages.chats);
+        // io.to(user.room).emit(messages)
+        // // res.json(messages);
     })
 })
 

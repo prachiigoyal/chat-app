@@ -1,8 +1,6 @@
 const mongoose=require('mongoose')
 
 const messageSchema = new mongoose.Schema({
-    // message:String,
-    // userName:String,
     room:String,
     chats:[{
         message:String,
