@@ -43,6 +43,7 @@ socket.emit('join',{username,room},(error)=>{
         alert(error)
         location.href='/'
     }
+    
     fetch(`http://localhost:3000/chat/${room}`,{
         method:'get',
         headers:{"Content-Type":"application/json"}
