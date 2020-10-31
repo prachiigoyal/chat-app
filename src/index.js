@@ -15,8 +15,7 @@ const io=socketio(server)
 mongoose.Promise = global.Promise
 
 //connect to mongodb
-//mongodb+srv://chatapp:Admin@123456@cluster0.2im1i.mongodb.net/chat app?retryWrites=true&w=majority
-const uri= 'mongodb+srv://chatapp:Admin@123456@cluster0.2im1i.mongodb.net/chatapp?retryWrites=true&w=majority'
+const uri = 'mongodb://localhost/message';
 mongoose.connect(process.env.MONGODB_URI || uri,{
     useUnifiedTopology: true,
     useNewUrlParser: true,
@@ -48,7 +47,21 @@ if(error){
         room:user.room,
         users:getUsersInRoom(user.room)
     })
-    callback()
+
+    Message.findOne({room:user.room})
+    .then(data => {
+        if(!data){
+           return Message.insertMany([{ 
+                room:user.room,
+                chats:[]
+            }]).then(data => {
+                console.log(data)
+                callback()
+            })
+            .catch(console.log)
+        }
+        callback();
+    }).catch(console.log);
 })
 socket.on('messagesend',(message,callback)=>{
     
@@ -101,6 +114,7 @@ socket.on('disconnect', ()=>{
 })
 })
 
+//returns previous room chats
 app.get('/chat/:room',(req,res) => {
     const {room}=req.params;
     Message.findOne({room})
@@ -110,6 +124,16 @@ app.get('/chat/:room',(req,res) => {
         // io.to(user.room).emit(messages)
         // // res.json(messages);
     })
+})
+
+//returns all rooms
+app.get('/groups',(req,res) => {
+    Message.find({},{_id:0,room:1})
+    .then(data => {
+        console.log(data)
+        if(data)
+            res.json(data)
+    }).catch(console.log);
 })
 
 //===================

@@ -1,14 +1,20 @@
 const mongoose=require('mongoose')
 
 const messageSchema = new mongoose.Schema({
-    room:String,
+    room:{
+        type:String,
+        required:true,
+        unique:true
+    },
     chats:[{
         message:String,
         userName:String,
         createdAt:{
             type:Date,
             default:Date.now()
-        }
+        },
+        required:false,
+        default:[]
     }]
 })
 

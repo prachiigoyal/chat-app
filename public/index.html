@@ -1,25 +1,19 @@
-<!doctype html>
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Chat app</title>
-    <link rel="icon" href="/img/favicon.png">
-    <link rel="stylesheet" href="/css/styles.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/main.css" type="text/css">
+    <title>Group Discussion</title>
 </head>
-
 <body>
-   <div class="centered-form">
-       <div class="centered-form__box">
-           <h1>Join</h1>
-           <form action="/chat.html">
-               <label for="username">Username</label>
-               <input type="text" name="username" placeholder="Username" required>
-                <label for="room">Room</label>
-               <input type="text" name="room" placeholder="Room" required>
-               <button>Enter Chat Room</button>
-            </form>
-       </div>
-   </div>
+    <h1 class="header">Group Discussion</h1>
+    <input class="search" type="search" placeholder="Seach Rooms"/>
+    <form action="/join.html" method="GET" class="newgroup">
+        <button type="submit">Create New</button>
+    </form>
+    <section class="groups">
+    </section>
+    <script src="./js/index.js" type="text/javascript"></script>
 </body>
-
 </html>
