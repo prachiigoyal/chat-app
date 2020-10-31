@@ -16,7 +16,7 @@ const io=socketio(server)
 mongoose.Promise = global.Promise
 
 //connect to mongodb
-uri='mongodb+srv://chatapp:Admin@123456@cluster0.2im1i.mongodb.net/chatapp?retryWrites=true&w=majority'
+
 mongoose.connect(process.env.MONGODB_URI || uri,{
     useUnifiedTopology: true,
     useNewUrlParser: true,

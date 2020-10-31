@@ -51,6 +51,7 @@ socket.emit('join',{username,room},(error)=>{
     .then(data => {
         var html = "";
         console.log("yes")
+        console.log(data)
         for(var i=0;i<data.length;i++){
             html += Mustache.render(messageTemplate,{
                 message:data[i].message,

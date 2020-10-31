@@ -38,13 +38,13 @@ const renderGroups = (arr) => {
 
 search.addEventListener('input',(event) => {
     var searchVal = event.target.value;
-    // console.log(searchVal)
-    // console.log(groups)
+     console.log(searchVal)
+     console.log(groups)
     if(searchVal !== ""){
     var newGroups = groups.filter(item => item && item.room
         && item.room.toLowerCase().includes(searchVal));
         renderGroups(newGroups);
-    	// console.log(newGroups)
+    	 console.log(newGroups)
     } else{
         renderGroups(groups);
     }
