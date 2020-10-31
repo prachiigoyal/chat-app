@@ -8,6 +8,7 @@ const Message=require('./models/message')
 const { generateMessage,generateLocationMessage }=require('./utils/messages')
 const { addUsers,removeUser,getUser,getUsersInRoom}=require('./utils/users')
 const { assert } = require('console')
+const { uri }=require('../config/keys')
 
 const app=express()
 const server=http.createServer(app)
@@ -15,7 +16,7 @@ const io=socketio(server)
 mongoose.Promise = global.Promise
 
 //connect to mongodb
-const uri = 'mongodb://localhost/message';
+
 mongoose.connect(process.env.MONGODB_URI || uri,{
     useUnifiedTopology: true,
     useNewUrlParser: true,

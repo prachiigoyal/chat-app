@@ -44,7 +44,7 @@ socket.emit('join',{username,room},(error)=>{
         location.href='/'
     }
     
-    fetch(`http://localhost:3000/chat/${room}`,{
+    fetch(`https://groupchitchats.herokuapp.com/chat/${room}`,{
         method:'get',
         headers:{"Content-Type":"application/json"}
     }).then(res => res.json())

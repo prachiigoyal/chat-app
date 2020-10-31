@@ -9,7 +9,7 @@ window.onload = () => {
     roomVal = decodeURIComponent(p[1]);
     document.getElementById(p[0]).value = roomVal;
     document.getElementById(p[0]).setAttribute("value",roomVal);
-    document.getElementById('room').setAttribute("diabled","");    
+    document.getElementById('room').setAttribute("disabled","");    
     }
 }
 

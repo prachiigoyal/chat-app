@@ -2,7 +2,7 @@ var groups = [];
 const search = document.querySelector('.search');
 
 window.onload = async () => {
-    const allGroups = await fetch('http://localhost:3000/groups/',{
+    const allGroups = await fetch('https://groupchitchats.herokuapp.com/groups/',{
         method:'get',
         headers:{'Content-type':'application/json'}
     });
