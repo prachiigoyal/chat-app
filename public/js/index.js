@@ -2,7 +2,7 @@ var groups = [];
 const search = document.querySelector('.search');
 
 window.onload = async () => {
-    const allGroups = await fetch('/groups/',{
+    const allGroups = await fetch('groups/',{
         method:'get',
         headers:{'Content-type':'application/json'}
     });
