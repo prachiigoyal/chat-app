@@ -44,7 +44,7 @@ socket.emit('join',{username,room},(error)=>{
         location.href='/'
     }
     
-    fetch(`chat/${room}`,{
+    fetch(`/chat/${room}`,{
         method:'get',
         headers:{"Content-Type":"application/json"}
     }).then(res => res.json())
