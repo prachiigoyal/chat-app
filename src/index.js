@@ -70,8 +70,9 @@ socket.on('messagesend',(message,callback)=>{
     if(filter.isProfane(message)){
         return callback('Profanity is not allowed!')
     }
+    //
     const user=getUser(socket.id)
-    io.to(user.room).emit('message',generateMessage(user.username,message))
+    io.to(user.room).emit('message', generateMessage(user.username,message))
     
     const check = {
         room:user.room
